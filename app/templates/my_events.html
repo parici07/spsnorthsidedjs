@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>{{current_user.username}}'s Events</h1>
+<a href="{{url_for('create_event')}}">Create Event</a>
+<table>
+  <tr>
+    <th>Event Name</th>
+    <th>Event Code</th>
+    <th>Active?</th>
+
+  </tr>
+    {% for event in events %}
+    <tr>
+    <td>{{event.event_name}}</td>
+    <td>{{event.event_code}}</td>
+      {% if event.active_status == 0 %}
+      <td>No</td>
+      {% else %}
+      <td>Yes</td>
+      {% endif %}
+
+      <td>
+        <form method="post" action="{{url_for('event_status', event_id=event.event_id)}}">
+          <input type="hidden" name="_method" value="post">
+          <input type="submit" value="Update Status">
+        </form>
+      </td>
+
+    </tr>
+    {% endfor %}
+
+</table>
+{% endblock %}

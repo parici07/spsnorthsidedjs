@@ -1,0 +1,175 @@
+/* custom colours */
+--dark-purple: #100E1B;
+--light-purple: #9C61A8;
+--amethyst: #8661C1;
+--amethyst-hover: #6E45B0;
+--blue-mint: #9ac1b4ff;
+--mint: #b8d8baff;
+
+/* new custom colours */
+--black: #070309;
+--purple-pink: #CC46D9;
+--purple-blue: #200559;
+--soft-red: #D84270;
+--indigo: #420D91;
+
+
+
+@font-face {
+    font-family: 'cubic';
+    src: url('app/static/fonts/cubic.ttf');
+}
+
+@font-face {
+    font-family: 'Octosquares';
+    src: url('/static/fonts/Octosquares.ttf');
+} /* not working */
+
+body {
+
+    background-image: url('/static/images/defaultbg.png');
+    background-size: cover;
+    color: #D84270;
+    font-family: 'Tektur', monospace;
+}
+.registerbackground{
+   background-image: url('https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80');
+   background-size: cover;
+}
+
+.heading {
+    padding-left: 0.5em;
+}
+
+
+/* columns */
+
+.column {
+    float: left;
+
+}
+
+.loginleft{
+    width: 60%;
+    padding: 1em;
+    font-weight: 700;
+
+}
+
+.loginleft p{
+    padding: 1em, 0;
+    padding-right: 30%;
+}
+
+.loginright{
+    margin-top: 5em;
+    width: 30%;
+    border: 2px solid #D84270;
+    background-color: rgba(216, 66, 112, 0.5);
+    padding: 1em;
+    font-family: "Tektur", monospace;
+
+}
+
+.equal {
+    text-align: center;
+    width: 45%;
+    padding: 1em;
+
+}
+.row{
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0;
+}
+.row:after{
+
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.centre {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+.centre img{
+    width: 20%;
+}
+
+.header {
+
+    display: flex;
+    align-items: center;
+    color: #8661C1;
+
+}
+
+.header a{
+    color: #CC46D9;
+    transition: 0.5s;
+    margin-right: 1em;
+    text-decoration: none;
+    font-weight: 900;
+    font-size: 1.2em;
+    font-family: 'Nova Mono', monospace;
+    padding: 0.3em 0.5em;
+    margin: 0.5em;
+
+}
+
+.header a:hover{
+    transition: 0.5s;
+    color: #f8abff;
+
+}
+
+.logo {
+    color: #CC46D9;
+    padding-left: 0.5em;
+    padding-right: 1em;
+    font-size: 1.5em;
+    font-family: 'cubic', monospace;
+}
+
+#edit-profile{
+    font-size: 0.5em;
+}
+
+input {
+    border: 2px solid #D84270;
+    border-radius: 5px;
+    padding: 0.5em;
+    margin: 0.5em;
+    width: auto;
+    font-family: 'Nova Mono', monospace;
+    font-size: 1em;
+    background-color: rgba(247, 131, 150, 0.5);
+    color: white;
+}
+
+input:focus {
+    outline: none;
+    background-color: rgba(216, 66, 112, 0.5);
+    color: white;
+}
+
+input[type=submit] {
+    padding: 0.5em 2em;
+    transition: 0.5s;
+    color: #ffa8b7;
+    font-weight: 900;
+}
+
+
+
+input[type=submit]:hover {
+    cursor: pointer;
+    background-color: #D84270;
+    transition: 0.5s;
+}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="heading">Hi, {{ current_user.username}}!</h1>
+<div class="row">
+    <div class="column equal">
+        <h2>Recent Favourite</h2>
+        <hr>
+        {% if song.strTrackThumb %}
+            <img width="20%" src="{{ song.strTrackThumb }}" alt="Album Art">
+        {% else %}
+            <img width="20%" src="{{url_for('static', filename='images/album.png')}}" alt="Album Art">
+        {% endif %}
+        <p>{{fave_name}} by {{fave_artist}}</p>
+
+
+    </div>
+
+    <div class="column equal">
+
+        <h2>Current Event</h2>
+        <hr>
+        {% if status == 1 %}
+        <h3>You are at {{event_name}}</h3>
+        <p>Invite others to join with code <strong>{{event_code}}</strong></p>
+        {% else %}
+        <p>You are not in an event. Join an event or create one!</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

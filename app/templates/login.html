@@ -1,0 +1,45 @@
+{% extends "base.html"%}
+{% block body_class %}registerbackground{% endblock %}
+{% block content %}
+<div class="login">
+
+  <div class="row">
+    <div class="column loginleft">
+    <h1>Welcome to Northside DJs</h1>
+    <p>Northside DJs is a web application that allows users to create and join events, and add songs to a playlist for the event. </p>
+
+    </div>
+    <div class="column loginright">
+
+      <h1> Sign In</h1>
+
+      <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+
+        <p>
+          {{ form.username.label }}<br>
+          {{ form.username(size=32) }}<br>
+          {% for error in form.username.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+          {% endfor %}
+        </p>
+
+        <p>
+          {{ form.password.label }}<br>
+          {{ form.password(size=32) }}<br>
+            {% for error in form.password.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+
+        <!--<p class="remember">{{ form.remember_me }} Remember Me</p>-->
+        <p>{{ form.submit() }}</p>
+      </form>
+
+    </div>
+  </div>
+
+</div>
+
+
+{% endblock %}

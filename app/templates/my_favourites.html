@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>{{current_user.username}}'s favourites</h1>
+
+
+<table>
+    <tr>
+        <th>Song Name</th>
+        <th>Artist Name</th>
+    </tr>
+    {% for song in songs %}
+    <tr>
+        <td>{{song.song_name}}</td>
+        <td>{{song.artist_name}}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+
+{% endblock %}

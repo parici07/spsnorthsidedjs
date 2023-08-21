@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nova+Mono&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tektur&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Wavefont&display=swap">
+
+    <meta charset="UTF-8">
+    {% if title %}
+    <title>Northside DJs - {{ title }}</title>
+    {% else %}
+    <title>Welcome to Northside DJs</title>
+    {% endif %}
+</head>
+
+<body class="{% block body_class %}{% endblock %}">
+    <div class="header">
+        <h1 class="logo">NORTHSIDE DJS</h1>
+
+        <a href="{{ url_for('index') }}">home</a>
+        {% if current_user.is_anonymous %}
+            <a href="{{ url_for('register') }}">sign up</a>
+            <a href="{{ url_for('login') }}">log in</a>
+        {% else %}
+            <a href="{{ url_for('search') }}">search songs</a>
+
+                {% if current_user.in_event == 0 %}
+                <a href="{{ url_for('join_event')}}">join event</a>
+                {% else %}
+                    <a href="{{ url_for('event', event_id=user_event) }}">current event</a>
+                {% endif %}
+
+
+
+
+            <a href="{{ url_for('user', username=current_user.username) }}">my profile</a>
+            <a href="{{ url_for('logout') }}">log out</a>
+        {% endif %}
+    </div>
+
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+</body>
+</html>

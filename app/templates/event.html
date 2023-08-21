@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{event_name}}</h1>
+<h2>Event Code: {{event_code}}</h2>
+<h2>Admin: {{admin_username}}</h2>
+<table>
+    <tr>
+        <th>Guests</th>
+    </tr>
+
+    {% for user in users_names %}
+        <tr>
+            <td>{{user}}</td>
+        </tr>
+    {% endfor %}
+
+</table>
+
+<table>
+    <tr>
+        <th>Song</th>
+        <th>Artist</th>
+        <th>Votes</th>
+    </tr>
+
+    {% for song in event_songs %}
+        <tr>
+            <td>{{song.song_name}}</td>
+            <td>{{song.artist_name}}</td>
+            <td>{{song.votes}}</td>
+
+        </tr>
+    {% endfor %}
+
+</table>
+
+
+
+{% endblock %}

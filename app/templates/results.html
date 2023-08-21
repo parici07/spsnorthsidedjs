@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="centre">
+    {% if song %}
+        {% if song.strTrackThumb %}
+            <img src="{{ song.strTrackThumb }}" alt="Album Art">
+        {% else %}
+            <img src="{{url_for('static', filename='images/album.png')}}" alt="Album Art">
+        {% endif %}
+
+
+
+
+        <p>"{{ song.strTrack }}" by {{ song.strArtist }}</p>
+
+        <form method="post" action="/favourite_song">
+            <input type="hidden" name="song_name" value="{{ song.strTrack }}">
+            <input type="hidden" name="artist_name" value="{{ song.strArtist }}">
+            <input type="hidden" name="track_id" value="{{ song.idTrack }}">
+
+            {% if song_in_favourites(song.idTrack) %}
+                <button type="submit">♡</button>
+            {% else %}
+                <button type="submit">♥</button>
+            {% endif %}
+        </form>
+
+        {% if current_user.in_event == 1 %}
+
+            <form method="post" action="/vote_song">
+                <input type="hidden" name="song_name" value="{{ song.strTrack }}">
+                <input type="hidden" name="artist_name" value="{{ song.strArtist }}">
+                <input type="hidden" name="track_id" value="{{ song.idTrack }}">
+                <button type="submit">Vote</button>
+            </form>
+
+        {% endif %}
+
+        <p>Album: {{ song.strAlbum }}</p>
+        <p>Genre: {{ song.strGenre }}</p>
+
+        {% if song.strDescriptionEN %}
+                <p>{{ song.strDescriptionEN }}</p>
+        {% endif %}
+    {% else %}
+        <p>No results found.</p>
+    {% endif %}
+</div>
+{% endblock %}
