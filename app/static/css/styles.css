@@ -75,7 +75,84 @@ body {
     text-align: center;
     width: 45%;
     padding: 1em;
+}
 
+.profileleft {
+    width: 30%;
+    padding: 1em;
+
+}
+
+.profileright {
+    width: 60%;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.profileright a{
+    width: 80%;
+    border-radius: 5px;
+    padding: 2em;
+    margin: 0.5em;
+    background-color: rgba(216, 66, 112, 0.5);
+    color: white;
+    font-family: 'Nova Mono', monospace;
+    text-decoration: none;
+    transition: 0.5s;
+}
+
+.profileright a:hover{
+    transition: 0.5s;
+    width: 85%;
+    background-color: #D84270;
+
+}
+
+textarea{
+    width: 100%;
+    height: 100%;
+    padding: 1em;
+    border: 2px solid #D84270;
+    border-radius: 5px;
+    background-color: rgba(216, 66, 112, 0.5);
+    color: white;
+    font-family: 'Nova Mono', monospace;
+    font-size: 1em;
+    resize: none;
+}
+
+button{
+    border: 2px solid #D84270;
+    border-radius: 5px;
+    padding: 0.5em;
+    margin: 0.5em;
+    width: auto;
+    font-family: 'Nova Mono', monospace;
+    font-size: 1em;
+    background-color: rgba(247, 131, 150, 0.5);
+    color: white;
+    transition: 0.5s;
+}
+
+button:hover {
+    cursor: pointer;
+    background-color: #D84270;
+    transition: 0.5s;
+}
+
+.favouritebtn {
+    border: 2px solid #D84270;
+    border-radius: 5px;
+    height: 100%;
+    font-family: 'Nova Mono', monospace;
+    font-size: 1em;
+    background-color: rgba(247, 131, 150, 0.5);
+    color: white;
+    transition: 0.5s;
 }
 .row{
     display: flex;
@@ -95,6 +172,9 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    text-align: center;
+    padding: 1em;
+    margin: 0, 10em;
 
 }
 
@@ -128,6 +208,8 @@ body {
     color: #f8abff;
 
 }
+
+
 
 .logo {
     color: #CC46D9;
@@ -172,4 +254,19 @@ input[type=submit]:hover {
     cursor: pointer;
     background-color: #D84270;
     transition: 0.5s;
+}
+
+.code{
+    background-color: rgba(216, 66, 112, 0.5);
+    color: white;
+    font-family: 'Nova Mono', monospace;
+    padding: 1em;
+    border: 2px solid #D84270;
+    border-radius: 5px;
+    width: 90%;
+}
+
+hr{
+    border: 1.5px solid #D84270;
+    margin-bottom: 1em;
 }

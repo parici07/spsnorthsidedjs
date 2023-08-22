@@ -16,8 +16,8 @@ class User(UserMixin, db.Model):
     songs = db.relationship('FavouriteSong', back_populates='user')
     event_users = db.relationship('EventUsers', back_populates='user')
     voted_songs = db.relationship('VotedSongs', back_populates='user')
-    song_reviews = db.relationship('SongReviews', back_populates='user')
-    username_rel = db.relationship('SongReviews', back_populates='username_rel')
+    song_reviews = db.relationship('SongReviews', back_populates='user', foreign_keys='SongReviews.user_id')
+    username_rel = db.relationship('SongReviews', back_populates='username_rel', foreign_keys='SongReviews.username')
 
     def get_id(self):
         return str(self.user_id)
@@ -109,8 +109,8 @@ class SongReviews(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', name='song_reviews_user_id'))
     username = db.Column(db.String(64), db.ForeignKey('user.username', name='song_reviews_username'))
 
-    user = db.relationship('User', back_populates='song_reviews')
-    username_rel = db.relationship('User', back_populates='song_reviews')
+    user = db.relationship('User', back_populates='song_reviews', foreign_keys=user_id)
+    username_rel = db.relationship('User', back_populates='song_reviews', foreign_keys=username)
 
     def __repr__(self):
         return '<SongReviews {}>'.format(self.review_id)

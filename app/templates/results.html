@@ -22,9 +22,11 @@
             <input type="hidden" name="track_id" value="{{ song.idTrack }}">
 
             {% if song_in_favourites(song.idTrack) %}
-                <button type="submit">♡</button>
+                <button class="fa-solid fa-heart" type="submit"></button>
+
             {% else %}
-                <button type="submit">♥</button>
+                <button class="fa-regular fa-heart" type="submit"></button>
+
             {% endif %}
         </form>
 
@@ -49,4 +51,30 @@
         <p>No results found.</p>
     {% endif %}
 </div>
+
+<div class="row">
+    <div class="column equal">
+        <h2>Leave a Review</h2>
+        <form method="post" action="/add_review">
+        <textarea id="review" name="review"></textarea>
+        <input type="hidden" name="song_id" value="{{ song.idTrack }}">
+        <button type="submit">Add Review</button>
+</form>
+    </div>
+
+    <div class = "column equal">
+        <h2>Reviews</h2>
+        {% if all_reviews %}
+            {% for review in all_reviews %}
+                <p><strong>{{review.username}}:</strong> {{review.review}}</p>
+            {% endfor %}
+        {% else %}
+            <p>No reviews yet.</p>
+        {% endif %}
+    </div>
+</div>
+
+
+
+
 {% endblock %}
