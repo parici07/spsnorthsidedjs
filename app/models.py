@@ -11,6 +11,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     about_me = db.Column(db.String(140))
     in_event = db.Column(db.Boolean, default=False)
+    pfp = db.Column(db.String(140))
 
     events = db.relationship('Events', back_populates='user')
     songs = db.relationship('FavouriteSong', back_populates='user')
@@ -36,6 +37,8 @@ class Events(db.Model):
     event_name = db.Column(db.String(64), index=True, unique=True)
     event_code = db.Column(db.Integer, unique=True)
     active_status = db.Column(db.Boolean, default=False)
+    event_location = db.Column(db.String(140), index=True)
+    event_description = db.Column(db.String(140), index=True)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', name='fk_user_id'))
 

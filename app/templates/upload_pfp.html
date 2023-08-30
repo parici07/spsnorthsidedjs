@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="centre">
+<div class="filecontainer">
+    <h1>Upload Profile Picture</h1>
+
+    <form action="" method="post" enctype="multipart/form-data">
+    {{form.hidden_tag()}}
+        <label id="file_input_label" for="file_input"><i class="fa-solid fa-file-arrow-up"></i>  upload image</label>
+        <input type="file" id="file_input" name="pfp" accept="image/*">
+            <br>
+        <br>
+        <input type="submit" value="Upload">
+    </form>
+</div>
+</div>
+{% endblock %}

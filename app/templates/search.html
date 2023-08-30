@@ -1,15 +1,28 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Search</h1>
-<form method="post" action="/search">
-        <label for="artist">Artist:</label>
-        <input type="text" id="artist" name="artist" required>
 
-        <label for="song">Song:</label>
-        <input type="text" id="song" name="song" required>
 
-        <button type="submit">Search</button>
-</form>
+<div class="searchcard">
+        <h1>Search</h1>
+        <form method="post" action="/search">
+                <table>
+                        <tr>
+                                <td><label for="artist">Artist:</label></td>
+                                <td><input type="text" id="artist" name="artist" required></td>
+                        </tr>
+
+                        <tr>
+                                <td><label for="song">Song:</label></td>
+                                <td><input type="text" id="song" name="song" required></td>
+                        </tr>
+
+                        <tr>
+                                <td colspan="2" class="centretext"><button type="submit">Search</button></td>
+                        </tr>
+                </table>
+        </form>
+
+</div>
 {% endblock %}
 

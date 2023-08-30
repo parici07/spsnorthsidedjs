@@ -1,26 +1,41 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1> Create Event </h1>
-<form action="" method="post">
-    {{ form.hidden_tag() }}
 
-    <p>
-        {{form.event_name.label }}
-        {{ form.event_name(size=32)}}<br>
-        {% for error in form.event_name.errors %}
-        <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-    </p>
+<div class="searchcard">
+    <h1> Create Event </h1>
 
-    <p>
-        {{form.event_code.label}}
-        {{form.event_code(size=32)}} <br>
-        {% for error in form.event_code.errors %}
-        <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-    </p>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
 
-    <p>{{form.submit()}}</p>
-</form>
+        <table>
+            <tr>
+                <td><label for="event_name">Event Name</label></td>
+                <td><input type="text" name="event_name" id="event_name" required></td>
+            </tr>
+
+            <tr>
+                <td><label for="event_code">Event Code</label></td>
+                <td><input type="text" name="event_code" id="event_code" required></td>
+            </tr>
+
+            <tr>
+                <td><label for="event_location">Event Location</label></td>
+                <td><input type="text" name="event_location" id="event_location"></td>
+            </tr>
+
+            <tr>
+                <td><label for="event_description">Event Description</label></td>
+                <td><input type="text" name="event_description" id="event_description"></td>
+            </tr>
+
+            <tr>
+                <td colspan="2" class="centretext"><input type="submit" value="Create Event"></td>
+            </tr>
+        </table>
+
+
+    </form>
+</div>
+
 {% endblock %}

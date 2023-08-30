@@ -5,40 +5,65 @@
 <div class="centre">
     <h2 class="code">Event Code: {{event_code}}</h2>
     <h1>{{event_name}}</h1>
+    <p>Admin: <a class="link" href="{{url_for('user', username=admin_username)}}">{{admin_username}}</a></p>
+    {% if event_location %}
+        <p>Location: {{event_location}}</p>
+    {% endif %}
 
+    {% if event_description %}
+        <p>{{event_description}}</p>
+    {% endif %}
 </div>
 
-<h2>Admin: {{admin_username}}</h2>
-<table>
+<div class="row">
+    <div class="column equal">
+        <table>
     <tr>
         <th>Guests</th>
     </tr>
+    {% if users_names %}
+        {% for user in users_names %}
+            <tr>
+                <td><a class="link" href="{{url_for('user', username=user)}}">{{user}}</a></td>
+            </tr>
+        {% endfor %}
+    {% else %}
+            <tr>
+                <td>No guests have joined. Invite them with the code <strong>{{event_code}}</strong></td>
+            </tr>
+    {% endif %}
 
-    {% for user in users_names %}
-        <tr>
-            <td>{{user}}</td>
-        </tr>
-    {% endfor %}
 
 </table>
+    </div>
 
-<table>
+    <div class="column equal">
+        <table>
     <tr>
         <th>Song</th>
         <th>Artist</th>
         <th>Votes</th>
     </tr>
 
-    {% for song in event_songs %}
-        <tr>
-            <td>{{song.song_name}}</td>
-            <td>{{song.artist_name}}</td>
-            <td>{{song.votes}}</td>
+    {% if event_songs %}
+        {% for song in event_songs %}
+            <tr>
+                <td>{{song.song_name}}</td>
+                <td>{{song.artist_name}}</td>
+                <td>{{song.votes}}</td>
 
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan="3">No songs added yet</td>
         </tr>
-    {% endfor %}
+    {% endif %}
 
 </table>
+    </div>
+</div>
+
 
 
 

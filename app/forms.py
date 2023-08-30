@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, BooleanField, SubmitField, StringField, TextAreaField
+from wtforms import PasswordField, BooleanField, SubmitField, StringField, TextAreaField, FileField
 from wtforms.validators import ValidationError, Email, EqualTo, DataRequired, Length
 
 from app.models import User, Events
@@ -8,7 +8,7 @@ from app.models import User, Events
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
-    #remember_me = BooleanField('Remember Me')
+    remember_me = BooleanField('Remember Me')
     submit = SubmitField('SIGN IN')
 
 
@@ -36,10 +36,15 @@ class EditProfileForm(FlaskForm):
     about_me = TextAreaField('About me', validators=[Length(min=0, max=140)])
     submit = SubmitField('Submit')
 
+class UploadPfpForm(FlaskForm):
+    pfp = FileField('Profile Picture', validators=[DataRequired()])
+    submit = SubmitField('Upload')
 
 class CreateEventForm(FlaskForm):
     event_name = StringField('Event Name', validators=[DataRequired()])
     event_code = StringField('Event Code', validators=[DataRequired()])
+    event_location = StringField('Event Location', validators=[DataRequired()])
+    event_description = TextAreaField('Event Description', validators=[Length(min=0, max=140)])
     submit = SubmitField('Create Event')
 
     def validate_event_name(self, event_name):
@@ -76,3 +81,7 @@ class SongReviewForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     song_id = StringField('Song ID', validators=[DataRequired()])
     submit = SubmitField('Submit')
+
+class SearchUsersForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    submit = SubmitField('Search')

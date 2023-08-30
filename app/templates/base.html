@@ -6,7 +6,20 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tektur&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Wavefont&display=swap">
     <script src="https://kit.fontawesome.com/ea0cb5ba41.js" crossorigin="anonymous"></script>
+    <script>
+        function removeFlash(){
+            var flash = document.getElementById("flashmessage");
+            flash.remove();
+        }
 
+        function showSidebar(){
+            document.getElementById("sidebar").style.width = "250px";
+        }
+
+        function hideSidebar(){
+            document.getElementById("sidebar").style.width = "0";
+        }
+    </script>
     <meta charset="UTF-8">
     {% if title %}
     <title>Northside DJs - {{ title }}</title>
@@ -16,8 +29,8 @@
 </head>
 
 <body class="{% block body_class %}{% endblock %}">
-    <div class="header">
-        <h1 class="logo">NORTHSIDE DJS</h1>
+    <div class="header" id="top">
+        <h1 class="logo" onclick="location.href='{{ url_for('index') }}'">NORTHSIDE DJS</h1>
 
         <a href="{{ url_for('index') }}">home</a>
         {% if current_user.is_anonymous %}
@@ -31,25 +44,48 @@
                 {% else %}
                     <a href="{{ url_for('event', event_id=user_event) }}">current event</a>
                 {% endif %}
+            <a href="{{ url_for('search_users') }}">search users</a>
+
+            <a href="{{ url_for('user', username=current_user.username) }}"><i class="fa-solid fa-user"></i> {{current_user.username}}</a>
+
+            <a href="javascript:history.back()"><i class="fa-solid fa-arrow-left"></i></a>
+
+            <div class="hamburger">
+
+                <a href="javascript:showSidebar()"><i class="fa-solid fa-bars"></i></a>
+                <div id="sidebar">
+                    <a href="javascript:hideSidebar()"><i class="fa-solid fa-circle-xmark closebtn"></i></a>
+                    <a href="{{url_for('edit_profile')}}">edit profile</a>
+                    <a href="{{ url_for('logout') }}">log out</a>
+                </div>
+
+
+            </div>
 
 
 
-
-            <a href="{{ url_for('user', username=current_user.username) }}">my profile</a>
-            <a href="{{ url_for('logout') }}">log out</a>
         {% endif %}
+
     </div>
 
+    <div class="flash">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li id="flashmessage">{{ message }} <a href="javascript:removeFlash()"><i class="fa-regular fa-circle-xmark"></i></a> </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    </div>
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul>
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
     {% block content %}{% endblock %}
+<div class="footer header">
+        <a href="#top" id="scrollbtn"><i class="fa-solid fa-chevron-up"></i></a>
+    </div>
 </body>
+
+
+
 </html>

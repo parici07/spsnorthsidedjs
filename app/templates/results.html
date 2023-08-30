@@ -4,60 +4,69 @@
 
 
 <div class="centre">
-    {% if song %}
-        {% if song.strTrackThumb %}
-            <img src="{{ song.strTrackThumb }}" alt="Album Art">
-        {% else %}
-            <img src="{{url_for('static', filename='images/album.png')}}" alt="Album Art">
-        {% endif %}
-
-
-
-
-        <p>"{{ song.strTrack }}" by {{ song.strArtist }}</p>
-
-        <form method="post" action="/favourite_song">
-            <input type="hidden" name="song_name" value="{{ song.strTrack }}">
-            <input type="hidden" name="artist_name" value="{{ song.strArtist }}">
-            <input type="hidden" name="track_id" value="{{ song.idTrack }}">
-
-            {% if song_in_favourites(song.idTrack) %}
-                <button class="fa-solid fa-heart" type="submit"></button>
-
+    <div class="resultscard">
+        {% if song %}
+            {% if song.strTrackThumb %}
+                <img src="{{ song.strTrackThumb }}" alt="Album Art">
             {% else %}
-                <button class="fa-regular fa-heart" type="submit"></button>
-
+                <img src="{{url_for('static', filename='images/album.png')}}" alt="Album Art">
             {% endif %}
-        </form>
 
-        {% if current_user.in_event == 1 %}
 
-            <form method="post" action="/vote_song">
+
+
+
+            {% if song.strMusicVid %}
+        <p><a class="link" href="{{ song.strMusicVid }}" target="_blank">"{{ song.strTrack }}" by {{ song.strArtist }}</a></p>
+            {% else %}
+                <p>"{{ song.strTrack }}" by {{ song.strArtist }}</p>
+            {% endif %}
+
+
+            <form method="post" action="/favourite_song">
                 <input type="hidden" name="song_name" value="{{ song.strTrack }}">
                 <input type="hidden" name="artist_name" value="{{ song.strArtist }}">
                 <input type="hidden" name="track_id" value="{{ song.idTrack }}">
-                <button type="submit">Vote</button>
+
+                {% if song_in_favourites(song.idTrack) %}
+                    <button class="fa-solid fa-heart favouritebtn " type="submit"></button>
+
+                {% else %}
+                    <button class="fa-regular fa-heart favouritebtn" type="submit"></button>
+
+                {% endif %}
             </form>
 
-        {% endif %}
+            {% if current_user.in_event == 1 %}
 
-        <p>Album: {{ song.strAlbum }}</p>
-        <p>Genre: {{ song.strGenre }}</p>
+                <form method="post" action="/vote_song">
+                    <input type="hidden" name="song_name" value="{{ song.strTrack }}">
+                    <input type="hidden" name="artist_name" value="{{ song.strArtist }}">
+                    <input type="hidden" name="track_id" value="{{ song.idTrack }}">
+                    <button type="submit">Vote</button>
+                </form>
 
-        {% if song.strDescriptionEN %}
-                <p>{{ song.strDescriptionEN }}</p>
+            {% endif %}
+
+            <p>Album: {{ song.strAlbum }}</p>
+            <p>Genre: {{ song.strGenre }}</p>
+
+
+            {% if song.strDescriptionEN %}
+                    <p>{{ song.strDescriptionEN }}</p>
+            {% endif %}
+        {% else %}
+            <p>No results found.</p>
         {% endif %}
-    {% else %}
-        <p>No results found.</p>
-    {% endif %}
+    </div>
 </div>
 
 <div class="row">
     <div class="column equal">
         <h2>Leave a Review</h2>
         <form method="post" action="/add_review">
-        <textarea id="review" name="review"></textarea>
-        <input type="hidden" name="song_id" value="{{ song.idTrack }}">
+            <textarea id="review" name="review"></textarea>
+            <input type="hidden" name="song_id" value="{{ song.idTrack }}">
         <button type="submit">Add Review</button>
 </form>
     </div>
@@ -65,9 +74,22 @@
     <div class = "column equal">
         <h2>Reviews</h2>
         {% if all_reviews %}
-            {% for review in all_reviews %}
-                <p><strong>{{review.username}}:</strong> {{review.review}}</p>
-            {% endfor %}
+            <table>
+
+                {% for review in all_reviews %}
+                    <tr>
+                        <td><strong>{{review.username}}:</strong> {{review.review}}</td>
+                        {% if current_user.username == review.username %}
+                            <td>
+                                <form method="post" action="{{url_for('delete_review', review_id=review.id)}}">
+                                    <input type="hidden" name="review_id" value="{{ review.id }}">
+                                    <button type="submit">Delete</button>
+                                </form>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </table>
         {% else %}
             <p>No reviews yet.</p>
         {% endif %}
