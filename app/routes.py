@@ -9,6 +9,7 @@ from werkzeug.urls import url_parse
 from werkzeug.utils import secure_filename
 import requests
 import os
+import datetime
 
 
 @app.context_processor # injects the current event the user is in into all templates
@@ -236,23 +237,41 @@ def event_status(event_id):
     user_id = current_user.user_id # gets the current user's id
     user_active = User.query.get(user_id).in_event # gets whether the user is in an event
     if event: # checks if the event exists
+
         if event.active_status == 1: # checks if the event is active
+
+            f = open('app/static/history/' + event.event_name + '.txt', 'a')  # opens a file to store the event history
+            f.write('Event History for ' + event.event_name + '\n \n') # writes the event name to the file
+            f.write('Date: ' + str(datetime.datetime.now()) + '\n \n') # writes the date to the file
+            f.write('All Users' + '\n' + '---' + '\n') # writes all songs to the file
+
             event.active_status = 0 # sets the event to inactive
 
             all_users = EventUsers.query.filter_by(event_id=event_id).all() # gets all users in the event
 
             user_ids = [] # creates a list to store the user ids
             for user in all_users: # loops through all users in the event
+
+                username = User.query.get(user.user_id).username # gets the username of the user
+                f.write(username + '\n') # writes the username to the file
+
                 user_in_event = User.query.get(user.user_id) # check if this is actually necessary
                 user_in_event.in_event = 0 # sets the user to not in an event
                 user_ids.append(user.user_id) # adds the user id to the list of user ids
                 db.session.delete(user) # removes user from the event database
                 db.session.commit() # commits to database
 
+            f.write('\nAll Songs' + '\n'+ '---' + '\n') # writes all songs to the file
+
             event_songs = VotedSongs.query.filter_by(event_id=event_id).all() # gets all voted songs in the event
             for song in event_songs: # loops through all songs in the event
+                f.write(song.song_name + ' by ' + song.artist_name + '\n') # writes the song name and artist name to the file
+
                 db.session.delete(song) # removes song from the event database
                 db.session.commit() # commits to database
+
+            f.write('\n \n')
+            f.close() # closes the file
 
             flash(f'{event.event_name} has been deactivated')
 
