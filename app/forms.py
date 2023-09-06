@@ -45,6 +45,7 @@ class CreateEventForm(FlaskForm): # Create event form for existing users
     event_code = StringField('Event Code', validators=[DataRequired()])
     event_location = StringField('Event Location', validators=[DataRequired()])
     event_description = TextAreaField('Event Description', validators=[Length(min=0, max=140)])
+    dj = StringField('DJ', validators=[DataRequired()])
     submit = SubmitField('Create Event')
 
     def validate_event_name(self, event_name): # Checks if event name already exists in database

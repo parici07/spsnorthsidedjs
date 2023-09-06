@@ -38,13 +38,16 @@
             </form>
 
             {% if current_user.in_event == 1 %}
+                {% if dj_status == 0 %}
 
-                <form method="post" action="/vote_song">
-                    <input type="hidden" name="song_name" value="{{ song.strTrack }}">
-                    <input type="hidden" name="artist_name" value="{{ song.strArtist }}">
-                    <input type="hidden" name="track_id" value="{{ song.idTrack }}">
-                    <button type="submit">Vote</button>
-                </form>
+                    <form method="post" action="/vote_song">
+                        <input type="hidden" name="song_name" value="{{ song.strTrack }}">
+                        <input type="hidden" name="artist_name" value="{{ song.strArtist }}">
+                        <input type="hidden" name="track_id" value="{{ song.idTrack }}">
+                        <button type="submit">Vote</button>
+                    </form>
+
+                {% endif %}
 
             {% endif %}
 

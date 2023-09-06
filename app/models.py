@@ -43,6 +43,7 @@ class Events(db.Model): # model for the events table
     active_status = db.Column(db.Boolean, default=False)
     event_location = db.Column(db.String(140), index=True)
     event_description = db.Column(db.String(140), index=True)
+    dj_id = db.Column(db.Integer, index=True)
 
     # information with foreign keys
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', name='fk_user_id'))
@@ -83,6 +84,7 @@ class EventUsers(db.Model): # model for the event users table
     # information about the event user
     event_user_id = db.Column(db.Integer, primary_key=True, unique=True)
     is_admin = db.Column(db.Boolean, default=False)
+    is_dj = db.Column(db.Boolean, default=False)
 
     # information with foreign keys
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', name='event_users_user_id'))

@@ -159,9 +159,9 @@ def search_users():
     form = SearchUsersForm() # sets form as the SearchUsersForm from forms.py
     user = form.username.data # sets user as the username searched in the form
     if user:
-        username = User.query.filter_by(username=user).first().username
-        print(username) #debug statement , ensuring the username is being found
-        if username: # checks if the username exists
+        found_user = User.query.filter_by(username=user).first() # gets the user from the database
+        if found_user: # checks if the username exists
+            username = found_user.username # sets username as the found users username
             return redirect(url_for('user', username=username))
         else: # if the username doesnt exist
             flash('User not found')
@@ -181,9 +181,23 @@ def create_event():
 
     if form.validate_on_submit():
         # creates a new event from the form data
+        dj = form.dj.data
+        print(dj)
+        search_dj = User.query.filter_by(username=dj).first()
+        if search_dj:
+            if search_dj.user_id == user_id:
+                flash('You cannot add yourself as a DJ')
+                return redirect(url_for('create_event'))
+            else:
+                dj_id = search_dj.user_id
+                print(dj_id)
+        else:
+            flash('DJ not found')
+            return redirect(url_for('create_event'))
+
         event = Events(event_name=form.event_name.data, event_code=form.event_code.data,
                        user_id=user_id, event_location=form.event_location.data,
-                       event_description=form.event_description.data)
+                       event_description=form.event_description.data, dj_id=dj_id)
         db.session.add(event) # adds new event to database
         db.session.commit() # commits to database
         flash(f'{form.event_name.data} has been created. Activate your event at "my events" to begin.')
@@ -304,7 +318,12 @@ def join_event():
             if event and event.active_status == 1: # if the event exists and the event is active
                 event_id = event.event_id # gets the event id
                 user_id = current_user.user_id # gets the current user's id
-                joining_user = EventUsers(event_id=event_id, user_id=user_id) # adds the user to the event
+
+                if user_id == event.dj_id: # checks if the user is the dj
+                    joining_user = EventUsers(event_id=event_id, user_id=user_id, is_dj=True) # adds the user to the event as a dj
+                else:
+                    joining_user = EventUsers(event_id=event_id, user_id=user_id) # adds the user to the event
+
                 current_user.in_event = 1 # sets the user to in an event
                 db.session.add(joining_user)
                 db.session.commit()
@@ -357,7 +376,7 @@ def leave_event():
 
 
         return redirect(url_for('user', username=current_user.username))
-    else: # handsl if the user somehow accesses the leave event button while not being in an event
+    else: # handles if the user somehow accesses the leave event button while not being in an event
         flash('You are not in an event')
         return redirect(url_for('user', username=current_user.username))
 
@@ -368,64 +387,83 @@ def event(event_id):
 
     # gets all necessary information about the current user, the event, and the songs in the event
     user_id = current_user.user_id
-    user_event = EventUsers.query.filter_by(user_id=user_id).first().event_id
-    event_name = Events.query.filter_by(event_id=user_event).first().event_name
-    event_code = Events.query.filter_by(event_id=user_event).first().event_code
-    event_description = Events.query.filter_by(event_id=user_event).first().event_description
-    event_location = Events.query.filter_by(event_id=user_event).first().event_location
-    users = EventUsers.query.filter_by(event_id=user_event).all()
-    admin = EventUsers.query.filter_by(is_admin=1, event_id=user_event).first()
-    event_songs = get_event_songs(user_event)
+    if EventUsers.query.filter_by(user_id=user_id).first(): # checks if the user is in an event
+        user_event = EventUsers.query.filter_by(user_id=user_id).first().event_id
+        event_name = Events.query.filter_by(event_id=user_event).first().event_name
+        event_code = Events.query.filter_by(event_id=user_event).first().event_code
+        event_description = Events.query.filter_by(event_id=user_event).first().event_description
+        event_location = Events.query.filter_by(event_id=user_event).first().event_location
+        users = EventUsers.query.filter_by(event_id=user_event).all()
+        admin = EventUsers.query.filter_by(is_admin=1, event_id=user_event).first()
+        dj = EventUsers.query.filter_by(is_dj=1, event_id=user_event).first()
+        print(dj)
+        event_songs = get_event_songs(user_event)
 
-    # gets the admin username
-    if admin:
-        admin_user = User.query.filter_by(user_id=admin.user_id).first()
-        admin_username = admin_user.username
+        # gets the admin username
+        if admin:
+            admin_user = User.query.filter_by(user_id=admin.user_id).first()
+            admin_username = admin_user.username
 
-    # gets the usernames of all users in the event
-    users_names = []
-    for user in users:
-        if user.is_admin == 0:
-            user_name = User.query.filter_by(user_id=user.user_id).first().username
-            users_names.append(user_name)
+        if dj:
+            dj_user = User.query.filter_by(user_id=dj.user_id).first()
+            dj_username = dj_user.username
+            print(dj_username)
+        else:
+            dj_username = None
+
+        # gets the usernames of all users in the event
+        users_names = []
+        for user in users:
+            if user.is_admin == 0:
+                user_name = User.query.filter_by(user_id=user.user_id).first().username
+                users_names.append(user_name)
+    else: # handles if the user is not in an event
+        user_event = None
+        event_name = None
+        event_code = None
+        event_description = None
+        event_location = None
+        users = None
+        admin_username = None
+        dj_username = None
+        event_songs = None
+        users_names = None
+        flash('You are not in an event')
+        return redirect(url_for('index'))
 
     # injects all necessary information into the template
-    return render_template('event.html', event_id=user_event, user_event=user_event, event_name=event_name, event_code=event_code, users=users, users_names=users_names, admin_username=admin_username, event_songs=event_songs, event_location=event_location, event_description=event_description)
+    return render_template('event.html', event_id=user_event, user_event=user_event, event_name=event_name, event_code=event_code, users=users, users_names=users_names, admin_username=admin_username, dj_username=dj_username, event_songs=event_songs, event_location=event_location, event_description=event_description)
 
 
 @app.route('/delete_event/<int:event_id>', methods=['GET', 'POST']) # allows the admin to delete an event
 @login_required
 def delete_event(event_id):
-    admin_status = EventUsers.query.filter_by(user_id=current_user.user_id).first().is_admin
-    print(admin_status)
-    if admin_status == 1: # checks if the user is the event admin
-        all_users = EventUsers.query.filter_by(event_id=event_id).all() # gets all users in the event
-        event_status = Events.query.get_or_404(event_id).active_status  # gets the event status
-        if event_status == 1:  # checks if the event is active
-            Events.query.get_or_404(event_id).active_status = 0  # sets the event to inactive
-            db.session.commit()
-        user_ids = []  # creates a list to store the user ids
-        for user in all_users:  # loops through all users in the event
-            user_in_event = User.query.get(user.user_id)
-            user_in_event.in_event = 0
-            user_ids.append(user.user_id)
-            db.session.delete(user)  # removes user from the event database
-            db.session.commit()
-            flash('Admin has left the event. All users have been removed from the event')
 
-        event_songs = VotedSongs.query.filter_by(event_id=event_id).all()  # gets all voted songs in the event
-        for song in event_songs:  # loops through all songs in the event
-            db.session.delete(song)  # removes song from the event database
-            db.session.commit()
-            flash('All songs have been removed from the event')
-
-        delete = Events.query.get_or_404(event_id)  # gets the event to be deleted
-        db.session.delete(delete)  # deletes the event
+    all_users = EventUsers.query.filter_by(event_id=event_id).all() # gets all users in the event
+    event_status = Events.query.get_or_404(event_id).active_status  # gets the event status
+    if event_status == 1:  # checks if the event is active
+        Events.query.get_or_404(event_id).active_status = 0  # sets the event to inactive
         db.session.commit()
-        flash('Event has been deleted')
-    else:
-        flash('You are not the admin of this event')
-        return redirect(url_for('user', username=current_user.username))
+    user_ids = []  # creates a list to store the user ids
+    for user in all_users:  # loops through all users in the event
+        user_in_event = User.query.get(user.user_id)
+        user_in_event.in_event = 0
+        user_ids.append(user.user_id)
+        db.session.delete(user)  # removes user from the event database
+        db.session.commit()
+        flash('Admin has left the event. All users have been removed from the event')
+
+    event_songs = VotedSongs.query.filter_by(event_id=event_id).all()  # gets all voted songs in the event
+    for song in event_songs:  # loops through all songs in the event
+        db.session.delete(song)  # removes song from the event database
+        db.session.commit()
+        flash('All songs have been removed from the event')
+
+    delete = Events.query.get_or_404(event_id)  # gets the event to be deleted
+    db.session.delete(delete)  # deletes the event
+    db.session.commit()
+    flash('Event has been deleted')
+
 
 
 
@@ -438,6 +476,19 @@ def delete_event(event_id):
 @app.route('/search', methods=['GET', 'POST']) # allows a user to search for a song
 @login_required
 def search():
+    user_id = current_user.user_id # gets the current user id
+
+    # handles if the user is the event dj
+    if EventUsers.query.filter_by(user_id=user_id).first(): # checks if the user is in an event
+        is_dj = EventUsers.query.filter_by(user_id=user_id).first().is_dj # checks if the user is a dj
+        print(is_dj)
+        if is_dj == True:
+            dj_status = 1
+        else:
+            dj_status = 0
+    else:
+        dj_status = 0
+
     if request.method == 'POST': # checks if the user has submitted a search
         song_name = request.form['song'] # gets the song name from the form
         artist_name = request.form['artist'] # gets the artist name from the form
@@ -458,7 +509,7 @@ def search():
 
 
         if song: # checks if the song exists
-            return render_template('results.html', song=song, song_in_favourites=song_in_favourites, all_reviews=all_reviews)
+            return render_template('results.html', song=song, song_in_favourites=song_in_favourites, all_reviews=all_reviews, dj_status=dj_status)
 
         else: # if the song does not exist
             flash('Song not found')

@@ -29,8 +29,10 @@
 
             {% if event.active_status == 0 %}
               <input type="submit" value="Begin Event">
+              <a href="/static/history/{{event.event_name}}.txt" download><i class="fa-solid fa-file-arrow-down" style="color:white;"></i></a>
             {% else %}
               <input type="submit" value="End Event">
+
             {% endif %}
           </form>
         </td>

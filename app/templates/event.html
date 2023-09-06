@@ -6,6 +6,11 @@
     <h2 class="code">Event Code: {{event_code}}</h2>
     <h1>{{event_name}}</h1>
     <p>Admin: <a class="link" href="{{url_for('user', username=admin_username)}}">{{admin_username}}</a></p>
+
+    {% if dj_username %}
+        <p>DJ: <a class="link" href="{{url_for('user', username=dj_username)}}">{{dj_username}}</a></p>
+    {% endif %}
+
     {% if event_location %}
         <p>Location: {{event_location}}</p>
     {% endif %}
